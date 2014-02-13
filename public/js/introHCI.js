@@ -14,6 +14,9 @@ function initializePage() {
 	$('#colorBtn').click(randomizeColors);
 }
 
+
+
+
 /*
  * Make an AJAX call to retrieve project details and add it in
  */
@@ -26,13 +29,41 @@ function addProjectDetails(e) {
 	// get rid of 'project' from the front of the id 'project3'
 	var idNumber = projectID.substr('project'.length);
 
+   // $.get("/project/" + idNumber, function(projectInfo) {
+   // 	$(this.closest('.project'));
+    //});
+  	$.get("/project/" + idNumber, function(projectInfo) {
+		var elem = $("#" + projectID + " .details");
+		$("#" + projectID + " .img").attr("src", projectInfo.image).addClass("detailsImage");
+		elem.html(projectInfo.summary);
+		console.log(elem);
+
+	});
+
+   $.get("/project/" + idNumber, addProject);
+   console.log("/project/" + idNumber);
+
 	console.log("User clicked on project " + idNumber);
 }
 
+
+function addProject (result) {
+	console.log(result);
+}
 /*
  * Make an AJAX call to retrieve a color palette for the site
  * and apply it
  */
 function randomizeColors(e) {
-	console.log("User clicked on color button");
+	$.get("/palette/", function(colors) {
+		$('body').css('background-color', colors[0]);
+		$('.thumbnail').css('background-color', colors[1]);
+		$('h1, h2, h3, h4, h5, h5').css('color', colors[2]);
+		$('p').css('color', colors[3]);
+		$('.project img').css('opacity', .75);
+	});
 }
+
+
+
+
